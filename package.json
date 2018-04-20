@@ -1,0 +1,25 @@
+{
+  "name": "node-local-ipv4",
+  "version": "1.0.0",
+  "description": "get local 'active' ipv4 address",
+  "main": "index.js",
+  "scripts": {
+    "test": "null"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yessky/node-local-ipv4.git"
+  },
+  "keywords": [
+    "node",
+    "local",
+    "ip",
+    "ipv4"
+  ],
+  "author": "aaron.xiao",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yessky/node-local-ipv4/issues"
+  },
+  "homepage": "https://github.com/yessky/node-local-ipv4#readme"
+}
