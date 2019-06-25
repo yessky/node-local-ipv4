@@ -6,10 +6,11 @@ module.exports = function ipv4(cache, full) {
 
   ipv4.cache = [];
 
+  var platform = process.platform;
   var rskip = /^(127\.0\.0\.1|::1|fe80(:1)?::1(%.*)?)$/i;
   var rmatch, cmd, stdout, matches, devName;
 
-  switch (process.platform) {
+  switch (platform) {
     case 'win32':
     case 'win64':
       cmd = 'route print 0.0.0.0';
@@ -21,10 +22,9 @@ module.exports = function ipv4(cache, full) {
         ip && ipv4.cache.push(ip);
       });
       break;
-    case 'freebsd':
-    case 'darwin':
     default:
-      cmd = 'netstat -r -n -f inet';
+      // fresbsd | darwin | linux
+      cmd = platform === 'linux' ? 'netstat -r -n -A inet' : 'netstat -r -n -f inet';
       rmatch = /\n\s*\bdefault\s*[\d\.]+.+?\n/g;
       stdout = execSync(cmd);
       matches = String(stdout).match(rmatch) || [];
