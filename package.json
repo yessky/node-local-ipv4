@@ -1,6 +1,6 @@
 {
   "name": "node-local-ipv4",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "get local 'active' ipv4 address",
   "main": "index.js",
   "scripts": {

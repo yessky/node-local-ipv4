@@ -7,8 +7,7 @@ module.exports = function ipv4(cache, full) {
   ipv4.cache = [];
 
   var platform = process.platform;
-  var rskip = /^(127\.0\.0\.1|::1|fe80(:1)?::1(%.*)?)$/i;
-  var rmatch, cmd, stdout, matches, devName;
+  var rmatch, rtitle, cmd, stdout, titles, matches, devIndex, devName;
 
   switch (platform) {
     case 'win32':
@@ -25,11 +24,17 @@ module.exports = function ipv4(cache, full) {
     default:
       // fresbsd | darwin | linux
       cmd = platform === 'linux' ? 'netstat -r -n -A inet' : 'netstat -r -n -f inet';
-      rmatch = /\n\s*\bdefault\s*[\d\.]+.+?\n/g;
-      stdout = execSync(cmd);
-      matches = String(stdout).match(rmatch) || [];
-      for (var i = 0, line; line = matches[ i ]; ++i) {
-        devName = line.replace(/^\s+|\s+$/, '').split(/\s+/)[ 5 ];
+      rtitle = /\bDestination\s+.*?(?=\n)/i;
+      rmatch = /\bdefault\s*[\d\.]+.+?\n/g;
+      stdout = execSync(cmd).toString();
+      titles = stdout.match(rtitle);
+      if (titles) titles = titles[ 0 ].replace(/^\s+|\s+$/, '').split(/\s+/);
+      titles = titles || [];
+      matches = stdout.match(rmatch) || [];
+      devIndex = titles.length === 5 ? 3 : 5;
+      for (var i = 0, line; line = matches[ i ], !devName; ++i) {
+        var part = line.replace(/^\s+|\s+$/, '').split(/\s+/);
+        devName = part[ devIndex ];
       }
       if (devName) {
         var aliasx = os.networkInterfaces()[ devName ];
